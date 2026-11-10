@@ -6,6 +6,7 @@ function Notes() {
     { id: 1, title: "Review map and filter", body: "Redo the TodoMVC steps without looking at the guide." },
     { id: 2, title: "Prepare for the quiz", body: "Practice writing one handler for many inputs." }
   ]);
+
   const [details, setDetails] = useState({ title: "", body: "" });
 
   const handleChange = (e) => {
@@ -15,6 +16,21 @@ function Notes() {
       [name]: value
     }));
   };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const trimmed = details.title.trim();
+    const trimmedBody = details.body.trim();
+    if (trimmed === '') {
+      return;
+    }
+    if (trimmedBody === '') {
+      return;
+    }
+    const newNote = {id: crypto.randomUUID(), title: trimmed, body: trimmedBody};
+    setNotes((currentNotes) => [...currentNotes, newNote]);
+    setDetails({ title: "", body: "" });
+  }
 
   return (
     <div className="grid min-h-screen grid-cols-[420px_1fr]">
@@ -31,7 +47,7 @@ function Notes() {
            />
          </div>
 
-         <form className="grid gap-3">
+         <form onSubmit={handleSubmit} className="grid gap-3">
            <p className="text-[13px] font-normal tracking-wide text-[#949494]">NEW NOTE</p>
            <input
              name="title"
