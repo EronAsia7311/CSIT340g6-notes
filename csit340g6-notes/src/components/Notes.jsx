@@ -19,7 +19,10 @@ function Notes() {
     const saved = localStorage.getItem('notes')
     return saved ? JSON.parse(saved) : startingNotes
   })
-  const [details, setDetails] = useState({ title: "", body: "" });
+  const [details, setDetails] = useState(() => {
+    const saved = localStorage.getItem('draft')
+    return saved ? JSON.parse(saved) : { title: "", body: "" }
+  });
   const [search, setSearch] = useState("")
   const titleRef = useRef(null)
 
