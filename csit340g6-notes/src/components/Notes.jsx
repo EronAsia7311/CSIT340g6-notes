@@ -1,5 +1,5 @@
-import NoteCard from './NoteCard.jsx'
 import { useState, useEffect } from 'react'
+import NoteCard from './NoteCard.jsx'
 
 const startingNotes = [
   {
@@ -19,8 +19,19 @@ function Notes() {
     const saved = localStorage.getItem('notes')
     return saved ? JSON.parse(saved) : startingNotes
   })
-  const [search, setSearch] = useState("")
   const [details, setDetails] = useState({ title: "", body: "" });
+  const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    localStorage.setItem('notes', JSON.stringify(notes))
+  }, [notes])
+
+  useEffect(() => {
+    const id = setTimeout(() => {
+      localStorage.setItem('draft', JSON.stringify(details))
+    }, 1000)
+    return () => clearTimeout(id)
+  }, [details])
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,10 +40,6 @@ function Notes() {
       [name]: value
     }));
   };
-
-  useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes))
-  }, [notes])
 
   function handleSubmit(e) {
     e.preventDefault();
